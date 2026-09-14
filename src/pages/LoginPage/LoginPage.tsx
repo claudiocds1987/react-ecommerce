@@ -1,7 +1,10 @@
-﻿export const LoginPage = () => {
+﻿import { LoginForm } from '@/features/auth/components/LoginForm/LoginForm';
+
+export const LoginPage = () => {
   return (
-    <main>
-      <h1>Login Page</h1>
+    <main style={{ padding: '2rem', maxWidth: '400px', margin: '0 auto' }}>
+      <h1>Iniciar Sesión</h1>
+      <LoginForm />
     </main>
   );
 };
