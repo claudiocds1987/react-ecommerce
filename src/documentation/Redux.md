@@ -174,22 +174,68 @@ export type AppDispatch = typeof store.dispatch;
 ```ts
 // Importamos los ganchos (hooks) originales que vienen por defecto en la librería 'react-redux'
 import { useDispatch, useSelector } from 'react-redux';
-
 // Importamos un tipo especial de TypeScript que nos ayuda a tipar correctamente el useSelector
 import type { TypedUseSelectorHook } from 'react-redux';
-
 // Importamos los tipos 'RootState' (la forma de todo tu estado global) y 'AppDispatch' (el tipo de tus acciones) desde tu archivo store.ts
 import type { RootState, AppDispatch } from './store';
-
 // Creamos y exportamos una versión personalizada de useDispatch llamada 'useAppDispatch'
 // Al aplicarle <AppDispatch>, le decimos a TypeScript que este dispatch solo aceptará acciones válidas de nuestra app
 export const useAppDispatch = () => useDispatch<AppDispatch>();
-
 // Creamos y exportamos una versión personalizada de useSelector llamada 'useAppSelector'
 // Le asignamos el tipo 'RootState' para que, cuando escribas código en tus componentes y leas el estado, el editor reconozca todas tus propiedades automáticamente
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
 ```
+
+---
+
+### 5. Modificar los archivos app.tsx, index.ts
+* **Ubicación:** `src/app/app.tsx`, `src/app/app.index.ts`
+
+**app.tsx:**
+```ts
+// Importa el componente Provider de 'react-redux' para inyectar el estado global en toda la app
+import { Provider } from 'react-redux';
+// Importa el RouterProvider de 'react-router-dom' para administrar la navegación y las páginas
+import { RouterProvider } from 'react-router-dom';
+// Importa el Store global de Redux creado en la misma carpeta (app/store.ts)
+import { store } from './store';
+// Importa la configuración de rutas de la aplicación creada en la misma carpeta (app/router.tsx)
+import { router } from './router';
+// Declara y exporta el componente funcional principal App que envolverá toda la interfaz de usuario
+export const App = () => {
+  return (
+    // El Provider envuelve la app y le entrega el store global de Redux a todos los componentes hijos
+    <Provider store={store}>
+      
+      {/* El RouterProvider renderiza las vistas y páginas basándose en la configuración de rutas */}
+      <RouterProvider router={router} />
+      
+    </Provider>
+  );
+};
+// Exporta el componente App por defecto para que pueda ser montado directamente en src/main.tsx
+export default App;
+
+```
+**index.ts**:
+```ts
+// ==========================================
+// API PÚBLICA DE LA CAPA APP (BARREL FILE)
+// ==========================================
+// Re-exporta todo el contenido del componente principal App (proveedores globales y rutas)
+export * from './App';
+// Re-exporta el store global de Redux (configureStore) para que pueda ser utilizado si es necesario
+export * from './store';
+// Re-exporta el rootReducer que combina los reducers de toda la aplicación (auth, products, etc.)
+export * from './rootReducer';
+// Re-exporta los hooks tipados globales (useAppDispatch y useAppSelector) listos para usar en componentes
+export * from './store.hooks';
+// Re-exporta la configuración del enrutador (createBrowserRouter) que define las vistas de la app
+export * from './router';
+
+```
+
 ---
 
 ### ¿Qué archivos se disparan y cómo funciona el ciclo cuando un usuario inicia sesión?
