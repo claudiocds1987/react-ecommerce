@@ -20,7 +20,7 @@ proyecto/
     │   ├── router.tsx                    # Aca se definen las rutas de las vistas
     │   ├── store.ts                      # configureStore global (une apis y slices)
     │   ├── rootReducer.ts                # Combinador de reducers de RTK Query y UI
-    │   ├── hooks.ts                      # useAppDispatch / useAppSelector tipados
+    │   ├── store.hooks.ts                # useAppDispatch / useAppSelector tipados
     │   └── App.tsx                       # Proveedores globales (Theme, Redux, Router)
     │
     ├── pages/                            # Vistas de la aplicación (ensamblan widgets y features)

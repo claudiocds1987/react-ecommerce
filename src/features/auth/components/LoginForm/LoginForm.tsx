@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLoginMutation } from "../../slices/authApi";
-import { useAppDispatch } from "@/app/hooks";
+import { useAppDispatch } from "@/app/store.hooks";
 import { setCredentials } from "../../slices/authSlice";
 // Declaramos el componente de React llamado LoginForm y lo hacemos exportable
 export const LoginForm = () => {

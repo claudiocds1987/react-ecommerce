@@ -1,5 +1,6 @@
 import { Navigate, Outlet } from 'react-router-dom';
-import { useAppSelector } from '@/app/hooks';
+import { useAppSelector } from '@/app/store.hooks';
+
 
 interface ProtectedRouteProps {
   requiredRole?: string;
