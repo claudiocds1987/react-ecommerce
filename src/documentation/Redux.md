@@ -166,9 +166,9 @@ export type AppDispatch = typeof store.dispatch;
 
 ```
 
-### 4. Los ganchos personalizados de tipado (`src/app/hooks.ts`)
+### 4. Los ganchos personalizados de tipado (`src/app/store.hooks.ts`)
 
-* **Ubicación:** `src/app/hooks.ts`
+* **Ubicación:** `src/app/store.hooks.ts`
 * **¿Para qué está?** Este archivo es el **puente oficial entre tus componentes de React y tu tienda de Redux**, adaptado con **TypeScript**. En lugar de usar los hooks genéricos de Redux, creamos versiones personalizadas (`useAppDispatch` y `useAppSelector`) para que TypeScript reconozca automáticamente la estructura del estado y te ofrezca autocompletado inteligente sin tener que repetir tipos en cada componente.
 
 ```ts
@@ -204,8 +204,9 @@ Cuando el usuario hace clic en ingresar, los archivos del proyecto se activan de
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLoginMutation } from "../../slices/authApi";
-import { useAppDispatch } from "@/app/hooks";
+import { useAppDispatch } from "@/app/store.hooks";
 import { setCredentials } from "../../slices/authSlice";
+
 // Declaramos el componente de React llamado LoginForm y lo hacemos exportable
 export const LoginForm = () => {
   // Creamos un estado local "form" para guardar lo que el usuario escribe en usuario y contraseña
@@ -380,13 +381,13 @@ Usar Redux Toolkit para almacenar datos en un store global:
 
 2. **`rootReducer.ts`**: Necesito este archivo para juntar todos los reducers que tiene la aplicación en uno solo (`combineReducers`) para que el sistema global los reconozca. Acá van los reducers de `auth`, y a futuro los de `products`, `cart`, etc.
 3. **`store.ts`**: Este archivo es el **Store global** de mi aplicación. Mantiene en memoria **todo el estado global de la aplicación** (unificando el `rootReducer` y sumando los middlewares necesarios para que la API de RTK Query funcione de manera fluida).
-4. **`hooks.ts`**: Este archivo es el puente para hacer la comunicación de mis componentes de React con el Store global (`store.ts`) adaptado con TypeScript. Se crean 2 hooks personalizados:
+4. **`store.hooks.ts`**: Este archivo es el puente para hacer la comunicación de mis componentes de React con el Store global (`store.ts`) adaptado con TypeScript. Se crean 2 hooks personalizados:
 * **`useAppDispatch`**: Este hook se utiliza para despachar acciones (como `setCredentials` o `logout`) y así **actualizar** el estado global de la aplicación.
 * **`useAppSelector`**: Es el hook que permite a tus componentes **leer o extraer datos** directamente del estado global (`store.ts`). Gracias a que está tipado con `RootState`, cuando escribes por ejemplo `useAppSelector((state) => state.auth.user)`, TypeScript te autocompleta automáticamente las propiedades (como `username`, `role`, etc.) sin que tengas que tiparlas a mano en el componente.
 
 
 5. **`LoginForm.tsx`**: Este es el componente que tiene el formulario cuando el usuario hace el login. Este componente se encarga de enviar las credenciales a la API. Cuando recibe la respuesta exitosa, hace lo siguiente:
-* **a.** Verifica si hay un token. Si es correcto, utiliza el hook `useAppDispatch` (del archivo `hooks.ts`) para disparar la acción **`setCredentials` (proveniente de `authSlice.ts`)**, la cual se encarga de guardar los datos del usuario y su token en el estado global (`store.ts`) y en el `localStorage`.
+* **a.** Verifica si hay un token. Si es correcto, utiliza el hook `useAppDispatch` (del archivo `store.hooks.ts`) para disparar la acción **`setCredentials` (proveniente de `authSlice.ts`)**, la cual se encarga de guardar los datos del usuario y su token en el estado global (`store.ts`) y en el `localStorage`.
 * **b.** Pregunta si el rol del usuario es "administrador". Si es así, lo redirige al dashboard de administrador (`/admin`); caso contrario, lo envía a la página principal (`/` con el listado de productos).
 
 

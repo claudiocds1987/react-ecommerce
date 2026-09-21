@@ -1,6 +1,6 @@
-﻿import { combineReducers } from '@reduxjs/toolkit';
-import authReducer from '@/features/auth/slices/authSlice';
-import { authApi } from '@/features/auth/slices/authApi';
+import { combineReducers } from '@reduxjs/toolkit';
+import { authReducer, authApi } from '@/features/auth';
+
 
 export const rootReducer = combineReducers({
   // Reducers will be registered here (e.g. auth, cart, products)
