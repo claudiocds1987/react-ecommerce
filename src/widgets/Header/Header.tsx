@@ -13,8 +13,8 @@ export const Header = () => {
       >
         <div className="flex items-center gap-2 sm:gap-3">
           <img
-            src="./icons/logo.svg"
-            alt="Logo de Ecommerce - V20"
+            src="/assets/icons/logo.svg"
+            alt="Logo de Ecommerce"
             className="h-14 w-14 drop-shadow-[0_0_6px_rgba(255,255,255,0.7)]"
           />
           <span className="pr-2 text-[9px] font-black tracking-wider text-white uppercase italic [word-spacing:0.3em] min-[380px]:text-[10px] sm:text-lg">
