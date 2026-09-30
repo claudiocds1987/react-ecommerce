@@ -1,5 +1,5 @@
 import { fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { environment } from '@/shared/environments';
+import { environment } from '@/environments';
 
 export const baseQuery = fetchBaseQuery({
   baseUrl: `${environment.serverUrl}/api`,
