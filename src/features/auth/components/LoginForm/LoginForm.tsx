@@ -1,101 +1,215 @@
-// src/features/auth/components/LoginForm/LoginForm.tsx
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLoginMutation } from "../../slices/authApi";
 import { useAppDispatch } from "@/app/store.hooks";
 import { setCredentials } from "../../slices/authSlice";
-// Declaramos el componente de React llamado LoginForm y lo hacemos exportable
+
 export const LoginForm = () => {
-  // Creamos un estado local "form" para guardar lo que el usuario escribe en usuario y contraseña
   const [form, setForm] = useState({ username: "", password: "" });
-  // Preparamos la función "login" de Redux Toolkit Query, y sacamos variables para saber si está cargando o si hubo un error
+  const [hidePassword, setHidePassword] = useState(true);
   const [login, { isLoading, error }] = useLoginMutation();
-  // Preparamos la función "dispatch" para poder mandar acciones a nuestro estado global de Redux
   const dispatch = useAppDispatch();
-  // Preparamos la función "navigate" para poder redirigir al usuario a otra página de la app
   const navigate = useNavigate();
-  // Función que se ejecuta cada vez que el usuario escribe una letra en los inputs
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // Sacamos el nombre del input (username o password) y lo que el usuario escribió (value)
     const { name, value } = e.target;
-    // Actualizamos el estado "form", copiando lo que ya tenía y sobrescribiendo solo el campo que cambió
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Función que se ejecuta cuando el usuario hace clic en el botón de enviar o presiona Enter
   const handleSubmit = async (e: React.FormEvent) => {
-    // Evitamos que la página se recargue por defecto al enviar el formulario
     e.preventDefault();
-    // Iniciamos un bloque try/catch por si ocurre algún error durante la petición al servidor
     try {
-      // Llamamos a la API de login con los datos del formulario y esperamos la respuesta con .unwrap()
       const user = await login(form).unwrap();
-      // Si la respuesta del servidor incluye un token de acceso...
       if (user.token) {
-        // Guardamos los datos del usuario y su token en el estado global de Redux
         dispatch(setCredentials({ user, token: user.token }));
-        // Verificamos si el rol del usuario es administrador
         if (user.role === "admin") {
-          // Si es admin, lo mandamos a la pantalla de administración
           navigate("/admin");
         } else {
-          // Si no es admin (es usuario normal), lo mandamos a la página principal
           navigate("/");
         }
       }
     } catch (err: unknown) {
-      // Si la petición falla, capturamos el error y lo mostramos en la consola del navegador
       console.error("Error de login:", err);
     }
   };
 
-  // Retornamos el código visual (JSX) que se va a pintar en la pantalla
   return (
-    // Creamos la etiqueta form y le decimos que al enviar ejecute la función handleSubmit
-    <form onSubmit={handleSubmit}>
-      {/* Contenedor visual para agrupar la etiqueta y el input del usuario */}
-      <div>
-        {/* Etiqueta de texto que indica qué se debe escribir */}
-        <label htmlFor="username">Usuario</label>
+    /* Cambiamos min-h-screen por flex flex-col items-center pt-8 md:pt-12 pb-12 para subirlo */
+    <div className="w-full flex flex-col items-center pt-8 md:pt-12 pb-12 bg-gray-50">
+      <div className="w-full max-w-md rounded-3xl border border-gray-100 bg-white p-8 shadow-lg md:p-10">
+        <div className="mb-8 flex flex-col items-center">
+          <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-600 shadow-lg shadow-indigo-200">
+            <svg
+              className="w-6 h-6 text-white"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+              />
+            </svg>
+          </div>
+          <h2 className="text-center text-3xl font-black tracking-tight text-slate-800">
+            ¡Bienvenido!
+          </h2>
+          <p className="mt-1 text-sm text-slate-400">
+            Ingresa tus credenciales para acceder
+          </p>
+        </div>
 
-        {/* Input de texto donde el usuario escribe su nombre de usuario */}
-        <input
-          id="username"
-          type="text"
-          name="username"
-          value={form.username}
-          onChange={handleChange}
-          required
-        />
+        <form onSubmit={handleSubmit} className="form-card flex flex-col gap-4">
+          {/* Campo Username */}
+          <div className="space-y-1">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500">
+              Username
+            </label>
+            <div className="relative flex items-center">
+              <span className="absolute left-3 text-slate-400">
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                  />
+                </svg>
+              </span>
+              <input
+                type="text"
+                name="username"
+                value={form.username}
+                onChange={handleChange}
+                required
+                placeholder="Tu usuario"
+                className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 focus:border-indigo-600 focus:ring-2 focus:ring-indigo-100 outline-none transition text-sm text-slate-700"
+              />
+            </div>
+          </div>
+
+          <div className="space-y-1">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500">
+              Password
+            </label>
+            <div className="relative flex items-center">
+              <span className="absolute left-3 text-slate-400">
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"
+                  />
+                </svg>
+              </span>
+              <input
+                type={hidePassword ? "password" : "text"}
+                name="password"
+                value={form.password}
+                onChange={handleChange}
+                required
+                placeholder="Tu contraseña"
+                className="w-full pl-10 pr-12 py-3 rounded-xl border border-gray-200 focus:border-indigo-600 focus:ring-2 focus:ring-indigo-100 outline-none transition text-sm text-slate-700"
+              />
+              <button
+                type="button"
+                onClick={() => setHidePassword(!hidePassword)}
+                className="absolute right-3 text-slate-400 hover:text-slate-600 cursor-pointer"
+              >
+                {hidePassword ? (
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"
+                    />
+                  </svg>
+                ) : (
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                    />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                    />
+                  </svg>
+                )}
+              </button>
+            </div>
+          </div>
+
+          {error && (
+            <div className="flex items-center gap-2.5 rounded-xl border border-red-100 bg-red-50 px-4 py-3 text-xs font-semibold text-red-600">
+              <svg
+                className="w-4 h-4 shrink-0"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                />
+              </svg>
+              <span>Error al iniciar sesión. Verifica tus datos.</span>
+            </div>
+          )}
+
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="mt-2 w-full py-3 px-4 text-white font-medium bg-indigo-600 rounded-xl hover:bg-indigo-700 transition duration-200 disabled:opacity-50 cursor-pointer shadow-md shadow-indigo-100 flex items-center justify-center gap-2"
+          >
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
+              />
+            </svg>
+            {isLoading ? "Ingresando..." : "Ingresar"}
+          </button>
+        </form>
       </div>
-
-      {/* Contenedor visual para agrupar la etiqueta y el input de la contraseña */}
-      <div>
-        {/* Etiqueta de texto para la contraseña */}
-        <label htmlFor="password">Contraseña</label>
-
-        {/* Input de tipo password para que los caracteres salgan ocultos con puntitos */}
-        <input
-          id="password"
-          type="password"
-          name="password"
-          value={form.password}
-          onChange={handleChange}
-          required
-        />
-      </div>
-
-      {/* Botón para enviar el formulario; se desactiva (disabled) si está cargando */}
-      <button type="submit" disabled={isLoading}>
-        {/* Si isLoading es true muestra "Ingresando...", si es false muestra "Login" */}
-        {isLoading ? "Ingresando..." : "Login"}
-      </button>
-
-      {/* Si la variable "error" tiene algo (es true/existe), muestra un texto rojo o un mensaje de error */}
-      {error && <p>Error al iniciar sesión</p>}
-    </form>
+    </div>
   );
 };
 
-// Exportamos el componente por defecto para poder importarlo fácilmente en otros archivos
 export default LoginForm;
