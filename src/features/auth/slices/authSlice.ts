@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 // Importa exclusivamente como tipo la interfaz PayloadAction para tipar los datos que reciben las acciones
 import type { PayloadAction } from '@reduxjs/toolkit'; 
 // Importa el tipo de datos User para tipar la información del usuario
-import type { User } from '@/entities/user/user.types';
+import type { User } from '@/entities/user/user.model';
 
 // Define la estructura (TypeScript interface) que tendrá el estado de autenticación
 interface AuthState {

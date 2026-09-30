@@ -3,7 +3,7 @@ import { createApi } from '@reduxjs/toolkit/query/react';
 // Importa la configuración base para las peticiones HTTP (como la URL base y los headers)
 import { baseQuery } from '@/shared/api/baseQuery';
 // Importa el tipo de datos User para asegurar un tipado estricto con TypeScript
-import type { User } from '@/entities/user/user.types';
+import type { User } from '@/entities/user/user.model';
 
 // Crea y exporta la API de autenticación utilizando RTK Query
 export const authApi = createApi({
