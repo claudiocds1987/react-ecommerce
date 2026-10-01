@@ -1,1 +1,1 @@
-﻿export { ProductDetailPage, default } from './ProductDetailPage';
+﻿export { ProductDetailPage, default } from "./ProductDetailPage";

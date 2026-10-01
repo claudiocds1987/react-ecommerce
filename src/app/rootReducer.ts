@@ -1,6 +1,5 @@
-import { combineReducers } from '@reduxjs/toolkit';
-import { authReducer, authApi } from '@/features/auth';
-
+import { combineReducers } from "@reduxjs/toolkit";
+import { authReducer, authApi } from "@/features/auth";
 
 export const rootReducer = combineReducers({
   // Reducers will be registered here (e.g. auth, cart, products)

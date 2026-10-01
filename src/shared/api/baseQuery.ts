@@ -1,5 +1,5 @@
-import { fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { environment } from '@/environments';
+import { fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { environment } from "@/environments";
 
 export const baseQuery = fetchBaseQuery({
   baseUrl: `${environment.serverUrl}/api`,
@@ -7,7 +7,7 @@ export const baseQuery = fetchBaseQuery({
     // Aquí puedes inyectar el token de auth globalmente si lo deseas
     const token = (getState() as any).auth?.token;
     if (token) {
-      headers.set('authorization', `Bearer ${token}`);
+      headers.set("authorization", `Bearer ${token}`);
     }
     return headers;
   },

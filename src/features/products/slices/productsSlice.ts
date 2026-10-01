@@ -1,7 +1,7 @@
 // src/features/products/productSlice.ts
-import type { Product } from '@/entities/product';
-import { createSlice } from '@reduxjs/toolkit';
-import type { PayloadAction } from '@reduxjs/toolkit';
+import type { Product } from "@/entities/product";
+import { createSlice } from "@reduxjs/toolkit";
+import type { PayloadAction } from "@reduxjs/toolkit";
 
 // Estado inicial
 interface ProductState {
@@ -15,14 +15,14 @@ interface ProductState {
 const initialState: ProductState = {
   items: [],
   totalItems: 0,
-  filterQuery: '',
+  filterQuery: "",
   loading: false,
   error: null,
 };
 
 // Slice de productos
 export const productSlice = createSlice({
-  name: 'products',
+  name: "products",
   initialState,
   reducers: {
     setProducts: (state, action: PayloadAction<Product[]>) => {
@@ -35,11 +35,11 @@ export const productSlice = createSlice({
       state.totalItems++;
     },
     removeProduct: (state, action: PayloadAction<number>) => {
-      state.items = state.items.filter(p => p.id !== action.payload);
+      state.items = state.items.filter((p) => p.id !== action.payload);
       state.totalItems = state.items.length;
     },
     updateProduct: (state, action: PayloadAction<Product>) => {
-      const index = state.items.findIndex(p => p.id === action.payload.id);
+      const index = state.items.findIndex((p) => p.id === action.payload.id);
       if (index !== -1) {
         state.items[index] = action.payload;
       }
@@ -75,8 +75,8 @@ export default productSlice.reducer;
 
 // Selectores (equivalente a withComputed en Angular)
 export const selectFilteredProducts = (state: { products: ProductState }) =>
-  state.products.items.filter(p =>
-    p.title.toLowerCase().includes(state.products.filterQuery.toLowerCase())
+  state.products.items.filter((p) =>
+    p.title.toLowerCase().includes(state.products.filterQuery.toLowerCase()),
   );
 
 export const selectProductsCount = (state: { products: ProductState }) =>

@@ -1,12 +1,12 @@
-﻿import { createBrowserRouter } from 'react-router-dom';
-import { MainLayout } from '@/app/MainLayout';
-import { CatalogPage } from '../pages/CatalogPage';
-import { ProductDetailPage } from '../pages/ProductDetailPage';
-import { CartPage } from '../pages/CartPage';
-import { CheckoutPage } from '../pages/CheckoutPage';
-import { LoginPage } from '../pages/LoginPage';
-import { ProtectedRoute } from './ProtectedRoute';
-import AdminDashboardPage from '@/pages/AdminDashboardPage/AdminDashboardPage';
+﻿import { createBrowserRouter } from "react-router-dom";
+import { MainLayout } from "@/app/MainLayout";
+import { CatalogPage } from "../pages/CatalogPage";
+import { ProductDetailPage } from "../pages/ProductDetailPage";
+import { CartPage } from "../pages/CartPage";
+import { CheckoutPage } from "../pages/CheckoutPage";
+import { LoginPage } from "../pages/LoginPage";
+import { ProtectedRoute } from "./ProtectedRoute";
+import AdminDashboardPage from "@/pages/AdminDashboardPage/AdminDashboardPage";
 
 export const router = createBrowserRouter([
   {
@@ -14,23 +14,23 @@ export const router = createBrowserRouter([
     element: <MainLayout />,
     children: [
       {
-        path: '/',
+        path: "/",
         element: <CatalogPage />,
       },
       {
-        path: '/product/:id',
+        path: "/product/:id",
         element: <ProductDetailPage />,
       },
       {
-        path: '/cart',
+        path: "/cart",
         element: <CartPage />,
       },
       {
-        path: '/checkout',
+        path: "/checkout",
         element: <CheckoutPage />,
       },
       {
-        path: '/login',
+        path: "/login",
         element: <LoginPage />,
       },
       // Rutas privadas / Protegidas para Administradores anidadas dentro del Layout
@@ -38,7 +38,7 @@ export const router = createBrowserRouter([
         element: <ProtectedRoute requiredRole="admin" />,
         children: [
           {
-            path: '/admin',
+            path: "/admin",
             element: <AdminDashboardPage />,
           },
           // Aca agregar más rutas protegidas de admin en el futuro (ej: /admin/products, etc.)

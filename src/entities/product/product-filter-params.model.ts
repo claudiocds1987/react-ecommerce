@@ -30,7 +30,7 @@ export interface ProductFilterParams {
 
   // 3. Parámetros de Ordenamiento (Match con el Controller)
   sortBy?: string; // Cambiamos 'sortColumn' por 'sortBy'
-  order?: 'asc' | 'desc' | ''; // Cambiamos 'sortOrder' por 'order'
+  order?: "asc" | "desc" | ""; // Cambiamos 'sortOrder' por 'order'
 
   // 4. Filtros de rango (opcionales según tu Controller)
   minPrice?: number;

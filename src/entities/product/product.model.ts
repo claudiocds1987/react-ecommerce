@@ -31,7 +31,7 @@ export interface ExtraAttribute {
   name: string;
   value: string;
   label: string;
-  dataType: 'text' | 'number' | 'boolean';
+  dataType: "text" | "number" | "boolean";
 }
 
 export interface ProductImage {

@@ -1,1 +1,1 @@
-﻿export { CheckoutPage, default } from './CheckoutPage';
+﻿export { CheckoutPage, default } from "./CheckoutPage";
