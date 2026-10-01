@@ -1,4 +1,4 @@
-```markdown
+````markdown
 # 🛒 E-Commerce — Arquitectura Enterprise (React + Redux Toolkit + Feature-Sliced Design)
 
 Arquitectura escalable basada en **Feature-Sliced Design (FSD)** para aplicaciones de comercio electrónico en React + Vite.
@@ -154,6 +154,7 @@ proyecto/
             ├── _mixins.scss
             └── global.scss
 ```
+````
 
 ---
 
@@ -176,6 +177,8 @@ app → pages → widgets → features → entities → shared
    - `cartSlice.ts`: excepción — carrito 100% cliente, sin RTK Query.
 5. **Code-splitting por página:** cada entrada de `pages/` se carga con `React.lazy()` en `app/router.tsx`.
 6. **Punto de entrada:** `index.html` referencia a `src/main.tsx`, que monta `<App />` (o el `RouterProvider`) envuelto en el `Provider` de Redux.
+
 ```
 
 Listo para pegar tal cual. ¿Seguimos con el código de `main.tsx` + `App.tsx` + `router.tsx`, o con `productsApi.ts`/`store.ts`?
+```

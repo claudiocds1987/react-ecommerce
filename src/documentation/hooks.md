@@ -12,12 +12,12 @@ Es el hook que le permite a tu componente **recordar información** (como un tex
 
 ### ✅ ¿Cuándo debe usarse?
 
-* Cuando necesitas que un valor **afecte la interfaz visual** y cambie en respuesta a acciones del usuario (clics, escritura, modales abiertos/cerrados).
+- Cuando necesitas que un valor **afecte la interfaz visual** y cambie en respuesta a acciones del usuario (clics, escritura, modales abiertos/cerrados).
 
 ### ❌ ¿Cuándo NO debe usarse?
 
-* Para valores fijos o constantes que nunca cambian.
-* Para datos que se pueden calcular directamente a partir de otros estados o props (evita el "estado derivado").
+- Para valores fijos o constantes que nunca cambian.
+- Para datos que se pueden calcular directamente a partir de otros estados o props (evita el "estado derivado").
 
 ### 💻 Ejemplo de código:
 
@@ -34,7 +34,6 @@ export const Counter = () => {
     </div>
   );
 };
-
 ```
 
 ---
@@ -47,13 +46,13 @@ Le permite a tu componente hacer cosas "fuera" del flujo normal de React, como c
 
 ### ✅ ¿Cuándo debe usarse?
 
-* Para **traer datos de un servidor** cuando el componente se monta (ej. cargar una lista de usuarios).
-* Para suscribirse a eventos globales del navegador (como `window.resize` o `scroll`).
+- Para **traer datos de un servidor** cuando el componente se monta (ej. cargar una lista de usuarios).
+- Para suscribirse a eventos globales del navegador (como `window.resize` o `scroll`).
 
 ### ❌ ¿Cuándo NO debe usarse?
 
-* Para transformar datos o hacer cálculos simples (hazlo directamente durante el renderizado, sin `useEffect`).
-* Como una solución mágica para todo; si no hay un sistema externo involucrado, probablemente no lo necesites.
+- Para transformar datos o hacer cálculos simples (hazlo directamente durante el renderizado, sin `useEffect`).
+- Como una solución mágica para todo; si no hay un sistema externo involucrado, probablemente no lo necesites.
 
 ### 💻 Ejemplo de código:
 
@@ -74,7 +73,6 @@ export const PageTitleUpdater = () => {
     </button>
   );
 };
-
 ```
 
 ---
@@ -87,12 +85,12 @@ Crea una caja mutable que persiste durante todo el ciclo de vida del componente,
 
 ### ✅ ¿Cuándo debe usarse?
 
-* Para **acceder directamente a elementos del DOM** (ej. hacer foco en un input con `.focus()` o hacer scroll automático en un chat).
-* Para guardar identificadores de temporizadores (`setInterval` o `setTimeout`) y poder cancelarlos después.
+- Para **acceder directamente a elementos del DOM** (ej. hacer foco en un input con `.focus()` o hacer scroll automático en un chat).
+- Para guardar identificadores de temporizadores (`setInterval` o `setTimeout`) y poder cancelarlos después.
 
 ### ❌ ¿Cuándo NO debe usarse?
 
-* Para guardar valores que **el usuario necesite ver reflejados visualmente** en la pantalla (para eso siempre usa `useState`).
+- Para guardar valores que **el usuario necesite ver reflejados visualmente** en la pantalla (para eso siempre usa `useState`).
 
 ### 💻 Ejemplo de código:
 
@@ -115,7 +113,6 @@ export const TextInputWithFocusButton = () => {
     </div>
   );
 };
-
 ```
 
 ---
@@ -134,11 +131,11 @@ Recuerda (cachea) el **resultado** de un cálculo pesado entre un render y otro.
 
 ### ✅ ¿Cuándo debe usarse?
 
-* Cuando tienes un cálculo matemático muy pesado, o estás filtrando/ordenando una lista gigante de miles de elementos y notas que la aplicación se congela o se pone lenta al escribir en un input.
+- Cuando tienes un cálculo matemático muy pesado, o estás filtrando/ordenando una lista gigante de miles de elementos y notas que la aplicación se congela o se pone lenta al escribir en un input.
 
 ### ❌ ¿Cuándo NO debe usarse?
 
-* Para cálculos sencillos (sumas simples, transformar un string, filtrar arreglos pequeños). El costo de crear la estructura de `useMemo` es a veces mayor que hacer el cálculo directo.
+- Para cálculos sencillos (sumas simples, transformar un string, filtrar arreglos pequeños). El costo de crear la estructura de `useMemo` es a veces mayor que hacer el cálculo directo.
 
 ### 💻 Ejemplo de código:
 
@@ -148,19 +145,19 @@ import { useState, useMemo } from "react";
 export const ExpensiveList = ({ items }: { items: number[] }) => {
   const [filter, setFilter] = useState("");
 
-  // Usamos useMemo para que el filtrado pesado solo se recalcule 
+  // Usamos useMemo para que el filtrado pesado solo se recalcule
   // si la lista 'items' o el texto 'filter' cambian.
   const filteredItems = useMemo(() => {
     console.log("Calculando elementos filtrados...");
-    return items.filter(item => item.toString().includes(filter));
+    return items.filter((item) => item.toString().includes(filter));
   }, [items, filter]);
 
   return (
     <div>
-      <input 
-        value={filter} 
-        onChange={(e) => setFilter(e.target.value)} 
-        placeholder="Filtrar..." 
+      <input
+        value={filter}
+        onChange={(e) => setFilter(e.target.value)}
+        placeholder="Filtrar..."
       />
       <ul>
         {filteredItems.map((item, index) => (
@@ -170,7 +167,6 @@ export const ExpensiveList = ({ items }: { items: number[] }) => {
     </div>
   );
 };
-
 ```
 
 ---
@@ -183,12 +179,12 @@ Recuerda (cachea) la **definición de una función** entre renders. En JavaScrip
 
 ### ✅ ¿Cuándo debe usarse?
 
-* Cuando le pasas una función como **prop a un componente hijo** que está optimizado con `React.memo` (para evitar que se re-renderice inútilmente).
-* Cuando esa función es una **dependencia dentro de un `useEffect**` y quieres evitar que el efecto se dispare en un bucle infinito.
+- Cuando le pasas una función como **prop a un componente hijo** que está optimizado con `React.memo` (para evitar que se re-renderice inútilmente).
+- Cuando esa función es una **dependencia dentro de un `useEffect**` y quieres evitar que el efecto se dispare en un bucle infinito.
 
 ### ❌ ¿Cuándo NO debe usarse?
 
-* Para funciones normales que le pasas a elementos HTML comunes (como un `<button onClick={handleClick}>`). No aporta nada y genera trabajo extra para React.
+- Para funciones normales que le pasas a elementos HTML comunes (como un `<button onClick={handleClick}>`). No aporta nada y genera trabajo extra para React.
 
 ### 💻 Ejemplo de código:
 
@@ -218,12 +214,11 @@ const ChildComponent = React.memo(({ onClick }: { onClick: () => void }) => {
   console.log("¡El componente hijo se renderizó!");
   return <button onClick={onClick}>Click en Hijo</button>;
 });
-
 ```
 
 ---
 
 ## 💡 Resumen rápido de optimización (`useMemo` vs `useCallback`):
 
-* ¿Quieres recordar el **resultado** de un cálculo? $\rightarrow$ **`useMemo`**
-* ¿Quieres recordar la **función** en sí misma para que no cambie de dirección de memoria? $\rightarrow$ **`useCallback`**
+- ¿Quieres recordar el **resultado** de un cálculo? $\rightarrow$ **`useMemo`**
+- ¿Quieres recordar la **función** en sí misma para que no cambie de dirección de memoria? $\rightarrow$ **`useCallback`**

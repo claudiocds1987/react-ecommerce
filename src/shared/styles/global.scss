@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 // Configuración de variables de tipografía
-$font-primary: 'Work Sans', sans-serif;
-$font-title: 'Montserrat', sans-serif;
+$font-primary: "Work Sans", sans-serif;
+$font-title: "Montserrat", sans-serif;
 
 :root {
   --font-primary: #{$font-primary};
@@ -19,14 +19,24 @@ body {
 
 @layer base {
   // Aplicar Montserrat automáticamente a títulos
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-family: var(--font-title);
     font-weight: 700;
     letter-spacing: -0.5px;
   }
 
   // Clases de texto grandes con Montserrat
-  .text-xl, .text-2xl, .text-3xl, .text-4xl, .text-5xl, .text-6xl {
+  .text-xl,
+  .text-2xl,
+  .text-3xl,
+  .text-4xl,
+  .text-5xl,
+  .text-6xl {
     font-family: var(--font-title);
     font-weight: 700;
   }
@@ -45,7 +55,11 @@ body {
 
 .bg-waves {
   background-image:
-    repeating-radial-gradient(circle at 0 0, rgba(255, 255, 255, 0.08), transparent 200px),
+    repeating-radial-gradient(
+      circle at 0 0,
+      rgba(255, 255, 255, 0.08),
+      transparent 200px
+    ),
     linear-gradient(to bottom, #2563eb, #06b6d4);
   background-size:
     300px 300px,
@@ -55,7 +69,11 @@ body {
 
 .bg-waves-reverse {
   background-image:
-    repeating-radial-gradient(circle at 0 0, rgba(255, 255, 255, 0.08), transparent 200px),
+    repeating-radial-gradient(
+      circle at 0 0,
+      rgba(255, 255, 255, 0.08),
+      transparent 200px
+    ),
     linear-gradient(to bottom, #06b6d4, #2563eb);
   background-size:
     300px 300px,

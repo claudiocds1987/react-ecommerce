@@ -6,20 +6,20 @@ En esta aplicación utilizamos **Redux Toolkit** para manejar los datos globales
 
 Dentro de la carpeta del módulo de autenticación, tenemos dos archivos clave:
 
-* **`authApi.ts`** (`src/features/auth/slices/authApi.ts`): Se encarga de la comunicación con el servidor. Define los endpoints de la API y **crea automáticamente los hooks** (como `useLoginMutation` y `useLazyGetMeQuery`) combinando los nombres de los endpoints con las herramientas de RTK Query, sin necesidad de programar esos hooks de forma manual.
+- **`authApi.ts`** (`src/features/auth/slices/authApi.ts`): Se encarga de la comunicación con el servidor. Define los endpoints de la API y **crea automáticamente los hooks** (como `useLoginMutation` y `useLazyGetMeQuery`) combinando los nombres de los endpoints con las herramientas de RTK Query, sin necesidad de programar esos hooks de forma manual.
 
 ```ts
 // Importa la función createApi de RTK Query para crear y configurar una API de forma automática
-import { createApi } from '@reduxjs/toolkit/query/react';
+import { createApi } from "@reduxjs/toolkit/query/react";
 // Importa la configuración base para las peticiones HTTP (como la URL base y los headers)
-import { baseQuery } from '@/shared/api/baseQuery';
+import { baseQuery } from "@/shared/api/baseQuery";
 // Importa el tipo de datos User para asegurar un tipado estricto con TypeScript
-import type { User } from '@/entities/user/user.types';
+import type { User } from "@/entities/user/user.types";
 
 // Crea y exporta la API de autenticación utilizando RTK Query
 export const authApi = createApi({
   // Define un nombre único para identificar este reducer dentro de app/store.ts global
-  reducerPath: 'authApi',
+  reducerPath: "authApi",
   // Asigna la configuración base de las peticiones HTTP definidas previamente
   baseQuery,
   // Define los endpoints o llamadas al servidor que va a manejar esta API
@@ -28,15 +28,15 @@ export const authApi = createApi({
     login: builder.mutation<User, { username: string; password: string }>({
       // Configura los detalles de la petición HTTP usando las credenciales recibidas
       query: (credentials) => ({
-        url: '/auth/login',      // La ruta del endpoint en el backend
-        method: 'POST',          // El método HTTP utilizado para enviar datos
-        body: credentials,       // lo que se envía al endpoint (el usuario y contraseña)
+        url: "/auth/login", // La ruta del endpoint en el backend
+        method: "POST", // El método HTTP utilizado para enviar datos
+        body: credentials, // lo que se envía al endpoint (el usuario y contraseña)
       }),
     }),
     // Define una consulta (petición GET) para obtener los datos del usuario actual
     getMe: builder.query<User, void>({
       // La función query retorna directamente la URL del endpoint ya que es un GET simple
-      query: () => '/auth/me',
+      query: () => "/auth/me",
     }),
   }),
 });
@@ -48,53 +48,53 @@ export const authApi = createApi({
 // En este caso, useLoginMutation para iniciar sesión y useLazyGetMeQuery para obtener los datos del usuario actual de manera perezosa (lazy).
 
 export const { useLoginMutation, useLazyGetMeQuery } = authApi;
-
 ```
 
-* **`authSlice.ts`** (`src/features/auth/slices/authSlice.ts`): Guarda la información del usuario conectado y su token de acceso en el estado global. También incluye funciones para guardar el token en el navegador (`localStorage`) cuando el usuario entra, o borrarlo cuando sale.
+- **`authSlice.ts`** (`src/features/auth/slices/authSlice.ts`): Guarda la información del usuario conectado y su token de acceso en el estado global. También incluye funciones para guardar el token en el navegador (`localStorage`) cuando el usuario entra, o borrarlo cuando sale.
 
 ```ts
 // Importa la función createSlice de Redux Toolkit para simplificar la creación de estados y reducers
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 // Importa exclusivamente como tipo la interfaz PayloadAction para tipar los datos que reciben las acciones
-import type { PayloadAction } from '@reduxjs/toolkit'; 
+import type { PayloadAction } from "@reduxjs/toolkit";
 // Importa el tipo de datos User para tipar la información del usuario
-import type { User } from '@/entities/user/user.types';
+import type { User } from "@/entities/user/user.types";
 // Define la estructura (TypeScript interface) que tendrá el estado de autenticación
 interface AuthState {
-  user: User | null;       // Datos del usuario actual o nulo si no ha iniciado sesión
-  token: string | null;    // Token de acceso JWT o nulo
-  loading: boolean;        // Indicador de carga para operaciones locales
-  error: string | null;    // Mensaje de error en caso de que ocurra uno
+  user: User | null; // Datos del usuario actual o nulo si no ha iniciado sesión
+  token: string | null; // Token de acceso JWT o nulo
+  loading: boolean; // Indicador de carga para operaciones locales
+  error: string | null; // Mensaje de error en caso de que ocurra uno
 }
 // Establece el estado inicial de la autenticación al cargar la aplicación
 const initialState: AuthState = {
   user: null,
-  token: localStorage.getItem('token'), // Intenta recuperar el token guardado previamente en el navegador
+  token: localStorage.getItem("token"), // Intenta recuperar el token guardado previamente en el navegador
   loading: false,
   error: null,
 };
 // Crea el slice de autenticación utilizando createSlice de Redux Toolkit
 export const authSlice = createSlice({
-  name: 'auth',       // Nombre identificador de este slice en el estado global
-  initialState,       // Estado inicial definido arriba
-  reducers: {         // Funciones (reducers) que modifican el estado local
+  name: "auth", // Nombre identificador de este slice en el estado global
+  initialState, // Estado inicial definido arriba
+  reducers: {
+    // Funciones (reducers) que modifican el estado local
     // Acción para guardar las credenciales cuando el usuario inicia sesión con éxito
     setCredentials: (
       state,
-      action: PayloadAction<{ user: User; token: string }>
+      action: PayloadAction<{ user: User; token: string }>,
     ) => {
-      state.user = action.payload.user;       // Actualiza el usuario en el estado global
-      state.token = action.payload.token;     // Actualiza el token en el estado global
-      state.error = null;                     // Limpia cualquier error previo
-      localStorage.setItem('token', action.payload.token); // Guarda el token en el navegador para persistencia
+      state.user = action.payload.user; // Actualiza el usuario en el estado global
+      state.token = action.payload.token; // Actualiza el token en el estado global
+      state.error = null; // Limpia cualquier error previo
+      localStorage.setItem("token", action.payload.token); // Guarda el token en el navegador para persistencia
     },
     // Acción para cerrar la sesión del usuario
     logout: (state) => {
-      state.user = null;                      // Borra el usuario del estado global
-      state.token = null;                     // Borra el token del estado global
-      localStorage.removeItem('token');       // Elimina el token del almacenamiento del navegador
-      localStorage.removeItem('shopping_cart'); // Limpia también el carrito de compras guardado
+      state.user = null; // Borra el usuario del estado global
+      state.token = null; // Borra el token del estado global
+      localStorage.removeItem("token"); // Elimina el token del almacenamiento del navegador
+      localStorage.removeItem("shopping_cart"); // Limpia también el carrito de compras guardado
     },
     // Acción para establecer un mensaje de error personalizado
     setError: (state, action: PayloadAction<string>) => {
@@ -107,51 +107,49 @@ export const authSlice = createSlice({
   },
 });
 // Exporta las acciones individuales para poder usarlas mediante el dispatch en los componentes
-export const { setCredentials, logout, setError, clearError } = authSlice.actions;
+export const { setCredentials, logout, setError, clearError } =
+  authSlice.actions;
 // Exporta el reducer por defecto para integrarlo en el rootReducer.ts global
 export default authSlice.reducer;
-
 ```
 
 ### 2. El unificador de datos (`src/app/rootReducer.ts`)
 
-* **Ubicación:** `src/app/rootReducer.ts`
-* **¿Para qué está?** A medida que la aplicación crece, tendremos datos de productos, carritos y usuarios. Este archivo funciona como una mesa central que **junta todos los reducers** de la aplicación en uno solo para que el sistema global los reconozca.
+- **Ubicación:** `src/app/rootReducer.ts`
+- **¿Para qué está?** A medida que la aplicación crece, tendremos datos de productos, carritos y usuarios. Este archivo funciona como una mesa central que **junta todos los reducers** de la aplicación en uno solo para que el sistema global los reconozca.
 
 ```ts
-import { combineReducers } from '@reduxjs/toolkit';
-import authReducer from '@/features/auth/slices/authSlice';
-import { authApi } from '@/features/auth/slices/authApi';
+import { combineReducers } from "@reduxjs/toolkit";
+import authReducer from "@/features/auth/slices/authSlice";
+import { authApi } from "@/features/auth/slices/authApi";
 
 export const rootReducer = combineReducers({
   // Reducers will be registered here (e.g. auth, cart, products)
   auth: authReducer,
   [authApi.reducerPath]: authApi.reducer,
 });
-
 ```
 
 ### 3. La central general (`src/app/store.ts`)
 
-* **Ubicación:** `src/app/store.ts`
-* **¿Para qué está?** Es el **Store global** de la aplicación. Une el `rootReducer` y mantiene la memoria centralizada de todo lo que ocurre en el sistema. Además, incluye los complementos necesarios para que las peticiones del servidor funcionen de manera fluida.
+- **Ubicación:** `src/app/store.ts`
+- **¿Para qué está?** Es el **Store global** de la aplicación. Une el `rootReducer` y mantiene la memoria centralizada de todo lo que ocurre en el sistema. Además, incluye los complementos necesarios para que las peticiones del servidor funcionen de manera fluida.
 
 ```ts
 // Importamos la función para crear la tienda (store) global de Redux Toolkit de forma sencilla
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore } from "@reduxjs/toolkit";
 
 // Importamos el reducer principal que junta y organiza todos los estados de nuestra aplicación
-import { rootReducer } from './rootReducer';
+import { rootReducer } from "./rootReducer";
 
 // Importamos la API de autenticación (hecha con RTK Query) para manejar peticiones como login, logout, etc.
-import { authApi } from '@/features/auth/slices/authApi';
+import { authApi } from "@/features/auth/slices/authApi";
 
 // Creamos y exportamos la tienda (store) global de Redux para que toda la app tenga acceso a los datos
 export const store = configureStore({
-  
   // Asignamos el reducer principal que se encargará de actualizar el estado global
   reducer: rootReducer,
-  
+
   // Configuramos los "middlewares" (funciones intermedias que se ejecutan antes de que las acciones lleguen al reducer)
   middleware: (getDefaultMiddleware) =>
     // Usamos los middlewares que ya trae Redux Toolkit por defecto y le sumamos (.concat) el de nuestra API de autenticación
@@ -163,36 +161,36 @@ export type RootState = ReturnType<typeof store.getState>;
 
 // Extraemos y exportamos el tipo de la función dispatch (muy útil en TypeScript al usar useDispatch para enviar acciones)
 export type AppDispatch = typeof store.dispatch;
-
 ```
 
 ### 4. Los ganchos personalizados de tipado (`src/app/store.hooks.ts`)
 
-* **Ubicación:** `src/app/store.hooks.ts`
-* **¿Para qué está?** Este archivo es el **puente oficial entre tus componentes de React y tu tienda de Redux**, adaptado con **TypeScript**. En lugar de usar los hooks genéricos de Redux, creamos versiones personalizadas (`useAppDispatch` y `useAppSelector`) para que TypeScript reconozca automáticamente la estructura del estado y te ofrezca autocompletado inteligente sin tener que repetir tipos en cada componente.
+- **Ubicación:** `src/app/store.hooks.ts`
+- **¿Para qué está?** Este archivo es el **puente oficial entre tus componentes de React y tu tienda de Redux**, adaptado con **TypeScript**. En lugar de usar los hooks genéricos de Redux, creamos versiones personalizadas (`useAppDispatch` y `useAppSelector`) para que TypeScript reconozca automáticamente la estructura del estado y te ofrezca autocompletado inteligente sin tener que repetir tipos en cada componente.
 
 ```ts
 // Importamos los ganchos (hooks) originales que vienen por defecto en la librería 'react-redux'
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
 // Importamos un tipo especial de TypeScript que nos ayuda a tipar correctamente el useSelector
-import type { TypedUseSelectorHook } from 'react-redux';
+import type { TypedUseSelectorHook } from "react-redux";
 // Importamos los tipos 'RootState' (la forma de todo tu estado global) y 'AppDispatch' (el tipo de tus acciones) desde tu archivo store.ts
-import type { RootState, AppDispatch } from './store';
+import type { RootState, AppDispatch } from "./store";
 // Creamos y exportamos una versión personalizada de useDispatch llamada 'useAppDispatch'
 // Al aplicarle <AppDispatch>, le decimos a TypeScript que este dispatch solo aceptará acciones válidas de nuestra app
 export const useAppDispatch = () => useDispatch<AppDispatch>();
 // Creamos y exportamos una versión personalizada de useSelector llamada 'useAppSelector'
 // Le asignamos el tipo 'RootState' para que, cuando escribas código en tus componentes y leas el estado, el editor reconozca todas tus propiedades automáticamente
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
-
 ```
 
 ---
 
 ### 5. Modificar los archivos app.tsx, index.ts
-* **Ubicación:** `src/app/app.tsx`, `src/app/app.index.ts`
+
+- **Ubicación:** `src/app/app.tsx`, `src/app/app.index.ts`
 
 **app.tsx:**
+
 ```ts
 // Importa el componente Provider de 'react-redux' para inyectar el estado global en toda la app
 import { Provider } from 'react-redux';
@@ -207,10 +205,10 @@ export const App = () => {
   return (
     // El Provider envuelve la app y le entrega el store global de Redux a todos los componentes hijos
     <Provider store={store}>
-      
+
       {/* El RouterProvider renderiza las vistas y páginas basándose en la configuración de rutas */}
       <RouterProvider router={router} />
-      
+
     </Provider>
   );
 };
@@ -218,22 +216,23 @@ export const App = () => {
 export default App;
 
 ```
+
 **index.ts**:
+
 ```ts
 // ==========================================
 // API PÚBLICA DE LA CAPA APP (BARREL FILE)
 // ==========================================
 // Re-exporta todo el contenido del componente principal App (proveedores globales y rutas)
-export * from './App';
+export * from "./App";
 // Re-exporta el store global de Redux (configureStore) para que pueda ser utilizado si es necesario
-export * from './store';
+export * from "./store";
 // Re-exporta el rootReducer que combina los reducers de toda la aplicación (auth, products, etc.)
-export * from './rootReducer';
+export * from "./rootReducer";
 // Re-exporta los hooks tipados globales (useAppDispatch y useAppSelector) listos para usar en componentes
-export * from './store.hooks';
+export * from "./store.hooks";
 // Re-exporta la configuración del enrutador (createBrowserRouter) que define las vistas de la app
-export * from './router';
-
+export * from "./router";
 ```
 
 ---
@@ -244,7 +243,7 @@ Cuando el usuario hace clic en ingresar, los archivos del proyecto se activan de
 
 1. **`LoginForm.tsx`** (`src/features/auth/components/LoginForm/LoginForm.tsx`):
 
-* Es el punto de partida. El usuario completa sus credenciales y presiona el botón de envío. El componente intercepta la acción y ejecuta el hook **`useLoginMutation`** (este hook no está escrito a mano en el código, sino que es **generado automáticamente por RTK Query** a partir del endpoint `login` definido en `authApi.ts`).
+- Es el punto de partida. El usuario completa sus credenciales y presiona el botón de envío. El componente intercepta la acción y ejecuta el hook **`useLoginMutation`** (este hook no está escrito a mano en el código, sino que es **generado automáticamente por RTK Query** a partir del endpoint `login` definido en `authApi.ts`).
 
 ```tsx
 import { useState } from "react";
@@ -348,54 +347,53 @@ export const LoginForm = () => {
 
 // Exportamos el componente por defecto para poder importarlo fácilmente en otros archivos
 export default LoginForm;
-
 ```
 
 2. **`authApi.ts`** (`src/features/auth/slices/authApi.ts`):
 
-* Se dispara automáticamente al recibir la orden del formulario. Toma las credenciales, arma la petición HTTP POST hacia el backend y espera la respuesta del servidor con los datos del usuario y el **token**.
+- Se dispara automáticamente al recibir la orden del formulario. Toma las credenciales, arma la petición HTTP POST hacia el backend y espera la respuesta del servidor con los datos del usuario y el **token**.
 
 3. **El Componente (`LoginForm.tsx` nuevamente):**
 
-* Una vez que la API responde exitosamente, el componente recupera esos datos y utiliza la función **`dispatch`** (gracias a useAppDispatch) para activar el cambio de estado global.
+- Una vez que la API responde exitosamente, el componente recupera esos datos y utiliza la función **`dispatch`** (gracias a useAppDispatch) para activar el cambio de estado global.
 
 4. **`authSlice.ts`** (`src/features/auth/slices/authSlice.ts`):
 
-* Recibe la acción disparada a través del reducer (`setCredentials`), toma el usuario y el token, actualiza la memoria centralizada de Redux y guarda de forma automática el token en el **`localStorage`** del navegador.
+- Recibe la acción disparada a través del reducer (`setCredentials`), toma el usuario y el token, actualiza la memoria centralizada de Redux y guarda de forma automática el token en el **`localStorage`** del navegador.
 
 5. **`router.tsx`** (`src/app/router.tsx`):
 
-* Finalmente, el sistema de rutas lee el estado global actualizado y redirige de manera automática al usuario hacia su panel correspondiente (por ejemplo, al catálogo si es cliente o al panel privado si es administrador).
+- Finalmente, el sistema de rutas lee el estado global actualizado y redirige de manera automática al usuario hacia su panel correspondiente (por ejemplo, al catálogo si es cliente o al panel privado si es administrador).
 
 ```tsx
-import { createBrowserRouter } from 'react-router-dom';
-import { CatalogPage } from '../pages/CatalogPage';
-import { ProductDetailPage } from '../pages/ProductDetailPage';
-import { CartPage } from '../pages/CartPage';
-import { CheckoutPage } from '../pages/CheckoutPage';
-import { LoginPage } from '../pages/LoginPage';
-import { ProtectedRoute } from './ProtectedRoute';
-import AdminDashboardPage from '@/pages/AdminDashboardPage/AdminDashboardPage';
+import { createBrowserRouter } from "react-router-dom";
+import { CatalogPage } from "../pages/CatalogPage";
+import { ProductDetailPage } from "../pages/ProductDetailPage";
+import { CartPage } from "../pages/CartPage";
+import { CheckoutPage } from "../pages/CheckoutPage";
+import { LoginPage } from "../pages/LoginPage";
+import { ProtectedRoute } from "./ProtectedRoute";
+import AdminDashboardPage from "@/pages/AdminDashboardPage/AdminDashboardPage";
 
 export const router = createBrowserRouter([
   {
-    path: '/',
+    path: "/",
     element: <CatalogPage />,
   },
   {
-    path: '/product/:id',
+    path: "/product/:id",
     element: <ProductDetailPage />,
   },
   {
-    path: '/cart',
+    path: "/cart",
     element: <CartPage />,
   },
   {
-    path: '/checkout',
+    path: "/checkout",
     element: <CheckoutPage />,
   },
   {
-    path: '/login',
+    path: "/login",
     element: <LoginPage />,
   },
   // Rutas privadas / Protegidas para Administradores
@@ -403,15 +401,13 @@ export const router = createBrowserRouter([
     element: <ProtectedRoute requiredRole="admin" />,
     children: [
       {
-        path: '/admin',
+        path: "/admin",
         element: <AdminDashboardPage />,
       },
       // Aca agregar más rutas protegidas de admin en el futuro (ej: /admin/products, etc.)
     ],
   },
 ]);
-
-
 ```
 
 ---
@@ -421,53 +417,53 @@ export const router = createBrowserRouter([
 Usar Redux Toolkit para almacenar datos en un store global:
 
 1. **Hay que crear dos archivos principales:**
-* **`authApi.ts`**: Este se va a encargar de tener los endpoints para comunicarse con el servidor/backend. Acá le decís cuáles son las URL, qué método usar (`POST`, `PUT`, etc.) y el `body` (lo que le querés enviar al servidor). Además, RTK Query genera automáticamente los hooks personalizados como `useLoginMutation`.
-* **`authSlice.ts`**: Este se encarga de manejar el estado local de la autenticación (guardar la información del usuario logueado, tokens, errores, etc.) y guarda/borra el token de acceso en el `localStorage`.
 
+- **`authApi.ts`**: Este se va a encargar de tener los endpoints para comunicarse con el servidor/backend. Acá le decís cuáles son las URL, qué método usar (`POST`, `PUT`, etc.) y el `body` (lo que le querés enviar al servidor). Además, RTK Query genera automáticamente los hooks personalizados como `useLoginMutation`.
+- **`authSlice.ts`**: Este se encarga de manejar el estado local de la autenticación (guardar la información del usuario logueado, tokens, errores, etc.) y guarda/borra el token de acceso en el `localStorage`.
 
 2. **`rootReducer.ts`**: Necesito este archivo para juntar todos los reducers que tiene la aplicación en uno solo (`combineReducers`) para que el sistema global los reconozca. Acá van los reducers de `auth`, y a futuro los de `products`, `cart`, etc.
 3. **`store.ts`**: Este archivo es el **Store global** de mi aplicación. Mantiene en memoria **todo el estado global de la aplicación** (unificando el `rootReducer` y sumando los middlewares necesarios para que la API de RTK Query funcione de manera fluida).
 4. **`store.hooks.ts`**: Este archivo es el puente para hacer la comunicación de mis componentes de React con el Store global (`store.ts`) adaptado con TypeScript. Se crean 2 hooks personalizados:
-* **`useAppDispatch`**: Este hook se utiliza para despachar acciones (como `setCredentials` o `logout`) y así **actualizar** el estado global de la aplicación.
-* **`useAppSelector`**: Es el hook que permite a tus componentes **leer o extraer datos** directamente del estado global (`store.ts`). Gracias a que está tipado con `RootState`, cuando escribes por ejemplo `useAppSelector((state) => state.auth.user)`, TypeScript te autocompleta automáticamente las propiedades (como `username`, `role`, etc.) sin que tengas que tiparlas a mano en el componente.
 
+- **`useAppDispatch`**: Este hook se utiliza para despachar acciones (como `setCredentials` o `logout`) y así **actualizar** el estado global de la aplicación.
+- **`useAppSelector`**: Es el hook que permite a tus componentes **leer o extraer datos** directamente del estado global (`store.ts`). Gracias a que está tipado con `RootState`, cuando escribes por ejemplo `useAppSelector((state) => state.auth.user)`, TypeScript te autocompleta automáticamente las propiedades (como `username`, `role`, etc.) sin que tengas que tiparlas a mano en el componente.
 
 5. **`LoginForm.tsx`**: Este es el componente que tiene el formulario cuando el usuario hace el login. Este componente se encarga de enviar las credenciales a la API. Cuando recibe la respuesta exitosa, hace lo siguiente:
-* **a.** Verifica si hay un token. Si es correcto, utiliza el hook `useAppDispatch` (del archivo `store.hooks.ts`) para disparar la acción **`setCredentials` (proveniente de `authSlice.ts`)**, la cual se encarga de guardar los datos del usuario y su token en el estado global (`store.ts`) y en el `localStorage`.
-* **b.** Pregunta si el rol del usuario es "administrador". Si es así, lo redirige al dashboard de administrador (`/admin`); caso contrario, lo envía a la página principal (`/` con el listado de productos).
 
+- **a.** Verifica si hay un token. Si es correcto, utiliza el hook `useAppDispatch` (del archivo `store.hooks.ts`) para disparar la acción **`setCredentials` (proveniente de `authSlice.ts`)**, la cual se encarga de guardar los datos del usuario y su token en el estado global (`store.ts`) y en el `localStorage`.
+- **b.** Pregunta si el rol del usuario es "administrador". Si es así, lo redirige al dashboard de administrador (`/admin`); caso contrario, lo envía a la página principal (`/` con el listado de productos).
 
 6. **`router.ts`**: Este archivo tiene las rutas internas de mi aplicación. Acá se define qué componente se va a mostrar al navegar a cada ruta. Por ejemplo, cuando en `LoginForm.tsx` el usuario se loguea exitosamente, el sistema de rutas lee el estado global actualizado y lo redirige automáticamente a `/admin` si es administrador, o a `/` si es un usuario común.
 
 ```tsx
-import { createBrowserRouter } from 'react-router-dom';
-import { CatalogPage } from '../pages/CatalogPage';
-import { ProductDetailPage } from '../pages/ProductDetailPage';
-import { CartPage } from '../pages/CartPage';
-import { CheckoutPage } from '../pages/CheckoutPage';
-import { LoginPage } from '../pages/LoginPage';
-import { ProtectedRoute } from './ProtectedRoute';
-import AdminDashboardPage from '@/pages/AdminDashboardPage/AdminDashboardPage';
+import { createBrowserRouter } from "react-router-dom";
+import { CatalogPage } from "../pages/CatalogPage";
+import { ProductDetailPage } from "../pages/ProductDetailPage";
+import { CartPage } from "../pages/CartPage";
+import { CheckoutPage } from "../pages/CheckoutPage";
+import { LoginPage } from "../pages/LoginPage";
+import { ProtectedRoute } from "./ProtectedRoute";
+import AdminDashboardPage from "@/pages/AdminDashboardPage/AdminDashboardPage";
 
 export const router = createBrowserRouter([
   {
-    path: '/',
+    path: "/",
     element: <CatalogPage />, // lista de productos para el comprador (página principal)
   },
   {
-    path: '/product/:id',
+    path: "/product/:id",
     element: <ProductDetailPage />,
   },
   {
-    path: '/cart',
+    path: "/cart",
     element: <CartPage />,
   },
   {
-    path: '/checkout',
+    path: "/checkout",
     element: <CheckoutPage />,
   },
   {
-    path: '/login',
+    path: "/login",
     element: <LoginPage />, // el componente LoginPage llama al componente LoginForm.tsx
   },
   // Rutas privadas / Protegidas para Administradores
@@ -475,12 +471,11 @@ export const router = createBrowserRouter([
     element: <ProtectedRoute requiredRole="admin" />,
     children: [
       {
-        path: '/admin',
+        path: "/admin",
         element: <AdminDashboardPage />,
       },
       // Acá se pueden agregar más rutas protegidas de admin en el futuro (ej: /admin/products, etc.)
     ],
   },
 ]);
-
 ```
