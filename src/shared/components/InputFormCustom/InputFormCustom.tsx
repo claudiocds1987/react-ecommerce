@@ -1,4 +1,10 @@
-import { Controller, type Control, type FieldError, type FieldValues, type Path } from "react-hook-form";
+import {
+  Controller,
+  type Control,
+  type FieldError,
+  type FieldValues,
+  type Path,
+} from "react-hook-form";
 import "./InputFormCustom.scss";
 
 interface Props<T extends FieldValues> {
@@ -9,7 +15,13 @@ interface Props<T extends FieldValues> {
   error?: FieldError | undefined;
 }
 
-const InputFormCustom = <T extends FieldValues>({ name, control, label, type, error }: Props<T>) => {
+const InputFormCustom = <T extends FieldValues>({
+  name,
+  control,
+  label,
+  type,
+  error,
+}: Props<T>) => {
   return (
     <div className="form-group">
       <label htmlFor={name}>{label}</label>

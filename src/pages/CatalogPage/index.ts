@@ -1,1 +1,1 @@
-﻿export { CatalogPage, default } from './CatalogPage';
+﻿export { CatalogPage, default } from "./CatalogPage";

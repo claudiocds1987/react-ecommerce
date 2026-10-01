@@ -4,6 +4,6 @@ export interface User {
   email: string;
   firstName: string;
   lastName: string;
-  role: 'admin' | 'customer';
+  role: "admin" | "customer";
   token?: string; // El JWT que devuelve el backend (ASP.NET Core)
 }

@@ -1,14 +1,14 @@
 // Importa la función createApi de RTK Query para crear y configurar una API de forma automática
-import { createApi } from '@reduxjs/toolkit/query/react';
+import { createApi } from "@reduxjs/toolkit/query/react";
 // Importa la configuración base para las peticiones HTTP (como la URL base y los headers)
-import { baseQuery } from '@/shared/api/baseQuery';
+import { baseQuery } from "@/shared/api/baseQuery";
 // Importa el tipo de datos User para asegurar un tipado estricto con TypeScript
-import type { User } from '@/entities/user/user.model';
+import type { User } from "@/entities/user/user.model";
 
 // Crea y exporta la API de autenticación utilizando RTK Query
 export const authApi = createApi({
   // Define un nombre único para identificar este reducer dentro de app/store.ts global
-  reducerPath: 'authApi',
+  reducerPath: "authApi",
   // Asigna la configuración base de las peticiones HTTP definidas previamente
   baseQuery,
   // Define los endpoints o llamadas al servidor que va a manejar esta API
@@ -17,15 +17,15 @@ export const authApi = createApi({
     login: builder.mutation<User, { username: string; password: string }>({
       // Configura los detalles de la petición HTTP usando las credenciales recibidas
       query: (credentials) => ({
-        url: '/auth/login',      // La ruta del endpoint en el backend
-        method: 'POST',          // El método HTTP utilizado para enviar datos
-        body: credentials,       // lo que se envía al endpoint (el usuario y contraseña)
+        url: "/auth/login", // La ruta del endpoint en el backend
+        method: "POST", // El método HTTP utilizado para enviar datos
+        body: credentials, // lo que se envía al endpoint (el usuario y contraseña)
       }),
     }),
     // Define una consulta (petición GET) para obtener los datos del usuario actual
     getMe: builder.query<User, void>({
       // La función query retorna directamente la URL del endpoint ya que es un GET simple
-      query: () => '/auth/me',
+      query: () => "/auth/me",
     }),
   }),
 });

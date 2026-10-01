@@ -29,7 +29,9 @@ export const Header = () => {
           onClick={() => navigate("/login")}
           className="group flex items-center gap-2 rounded-lg px-2 py-1.5 text-white transition-all hover:bg-white/5 sm:px-3 cursor-pointer"
         >
-          <span className="text-sm font-medium tracking-wide text-white">Login</span>
+          <span className="text-sm font-medium tracking-wide text-white">
+            Login
+          </span>
         </button>
 
         {/* Botón de Asistente IA */}
@@ -40,9 +42,21 @@ export const Header = () => {
           className="group flex items-center gap-2 rounded-lg px-2 py-1.5 text-white transition-all duration-300 hover:bg-white/5 sm:px-3 cursor-pointer"
           aria-label="Open AI assistant"
         >
-          <span className="hidden text-sm font-medium tracking-wide md:inline">Chat</span>
-          <svg className="w-5 h-5 group-hover:animate-bounce" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+          <span className="hidden text-sm font-medium tracking-wide md:inline">
+            Chat
+          </span>
+          <svg
+            className="w-5 h-5 group-hover:animate-bounce"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+            />
           </svg>
         </button>
       </div>
