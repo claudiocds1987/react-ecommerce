@@ -3,6 +3,27 @@
 Este proyecto implementa un formulario en **React** con validaciones tipadas usando **Zod** y gestión de estado con **React Hook Form**.  
 La arquitectura está organizada para mantener la lógica, los componentes y los estilos separados y reutilizables.
 
+### 📦 Instalación en una sola línea con Bun:
+
+bun install react-hook-form zod @hookform/resolvers
+
+### 📝 Explicación de cada dependencia
+
+- **`react-hook-form`**  
+  - Librería principal para manejar formularios en React.  
+  - Permite registrar inputs, controlar su estado y validar datos de manera eficiente sin necesidad de usar `useState` para cada campo.  
+  - Ventaja: mejora la performance porque minimiza los re-renderizados.
+
+- **`zod`**  
+  - Librería de validación y definición de esquemas.  
+  - Te permite describir la forma y reglas de tus datos (ejemplo: un email debe tener formato válido, un campo numérico debe ser mayor a 0).  
+  - Ventaja: tipado fuerte con TypeScript y validaciones declarativas.
+
+- **`@hookform/resolvers`**  
+  - Paquete puente entre **React Hook Form** y librerías de validación externas (como Zod, Yup, Joi).  
+  - En este caso, usamos el **`zodResolver`** para que React Hook Form entienda las reglas definidas en Zod.  
+  - Sin este paquete, tendrías que escribir validaciones manuales campo por campo.
+
 ---
 
 ## 📂 Estructura del Proyecto
