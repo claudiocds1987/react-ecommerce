@@ -80,3 +80,30 @@ body {
     auto;
   background-blend-mode: overlay;
 }
+
+// Efecto para las card de productos
+.glass-shine {
+  position: relative;
+  overflow: hidden;
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -200%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      120deg,
+      transparent,
+      rgba(255, 255, 255, 0.6),
+      transparent
+    );
+    transform: skewX(-25deg);
+    transition: all 0.7s ease-in-out;
+    z-index: 30;
+    pointer-events: none;
+  }
+  &:hover::after {
+    left: 200%;
+  }
+}
